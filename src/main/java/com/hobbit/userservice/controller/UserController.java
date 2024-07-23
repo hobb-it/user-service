@@ -5,22 +5,21 @@ import com.hobbit.userservice.repo.*;
 import org.springframework.http.HttpStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
 
     private final UserRepository userRepository;
 
-    @PostMapping(value = "/user/create")
+    @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public User postUser(@RequestBody User user) {
+    public User createUser(@RequestBody User user) {
         User newUser = new User();
         newUser.setName(user.getName());
         newUser.setSurname(user.getSurname());
@@ -31,10 +30,40 @@ public class UserController {
         return userRepository.save(newUser);
     }
 
-    @GetMapping(value = "/users")
-    @ResponseStatus(HttpStatus.OK)
-    public List<User> getUsers() {
-        final ArrayList users = new ArrayList<>((Collection) userRepository.findAll());
+    @GetMapping("/all")
+    public Iterable<User> getUsers() {
+        List<User> users = new ArrayList<>();
+        userRepository.findAll().forEach(users::add);
         return users;
     }
+
+    @GetMapping("/{id}")
+    public Optional<User> getUser(@PathVariable String id) {
+        UUID userId = UUID.fromString(id);
+        return userRepository.findById(userId);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable String id) {
+        UUID userId = UUID.fromString(id);
+        userRepository.deleteById(userId);
+    }
+
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser(@RequestBody User user) {
+        UUID userId = user.getId();
+        Optional<User> userData = userRepository.findById(userId);
+        if (userData.isPresent()) {
+            User _user = userData.get();
+            _user.setName(user.getName());
+            _user.setSurname(user.getSurname());
+            _user.setEmail(user.getEmail());
+            _user.setCellNum(user.getCellNum());
+            _user.setPassword(user.getPassword());
+            userRepository.save(_user);
+        }
+    }
+
 }

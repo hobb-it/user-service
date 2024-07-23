@@ -7,20 +7,27 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "users")
-@Getter
-@Setter
+import java.util.UUID;
+
+@Entity(name = "User")
+@Table(name = "User")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+    @Column(name="name", nullable = false)
     private String name;
+    @Column(name="surname", nullable = false)
     private String surname;
+    @Column(name="email", nullable = false)
     private String email;
+    @Column(name="cellNum")
     private String cellNum;
+    @Column(name="passoword", nullable = false)
     private String password;
 }
