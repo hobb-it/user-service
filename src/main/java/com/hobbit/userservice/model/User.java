@@ -24,6 +24,8 @@ public class User {
     private String name;
     @Column(name="surname", nullable = false)
     private String surname;
+    @Column(name="username", nullable = false)
+    private String username;
     @Column(name="email", nullable = false)
     private String email;
     @Column(name="cellNum")

@@ -26,6 +26,7 @@ public class UserController {
         newUser.setEmail(user.getEmail());
         newUser.setCellNum(user.getCellNum());
         newUser.setPassword(user.getPassword());
+        newUser.setUsername(user.getUsername());
 
         return userRepository.save(newUser);
     }
@@ -35,6 +36,19 @@ public class UserController {
         List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
         return users;
+    }
+
+    @GetMapping("/contacts")
+    public Map<String, String> getContactsOfUsers(
+            @RequestParam(value="users") String users
+    ) {
+        String[] userList = users.split(" ");
+        List<User> userContacts = userRepository.findEmailByUsernameIn(userList);
+        Map<String, String> userContactsMap = new HashMap<>();
+        for (User user : userContacts) {
+            userContactsMap.put(user.getUsername(), user.getEmail());
+        }
+        return userContactsMap;
     }
 
     @GetMapping("/{id}")
