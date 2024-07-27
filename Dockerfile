@@ -21,7 +21,7 @@ WORKDIR /app
 COPY --from=build /app/target/user-service-0.0.1-SNAPSHOT.jar /app/user-service.jar
 
 # Opzionale: se hai configurazioni esterne o file di properties che vuoi includere
-# COPY env_user.properties /app/
+COPY env.properties /app/
 
 # Espone la porta su cui gira il microservizio
 EXPOSE 8080
