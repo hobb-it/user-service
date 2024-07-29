@@ -24,7 +24,7 @@ COPY --from=build /app/target/user-service-0.0.1-SNAPSHOT.jar /app/user-service.
 # COPY env.properties /app/
 
 # Espone la porta su cui gira il microservizio
-EXPOSE 8080
+EXPOSE 8082
 
 # Comando per eseguire l'applicazione
 ENTRYPOINT ["java", "-jar", "user-service.jar"]
