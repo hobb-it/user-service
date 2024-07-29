@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Envs
-env.properties
+env_user.properties
