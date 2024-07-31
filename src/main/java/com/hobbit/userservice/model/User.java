@@ -20,9 +20,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    @Column(name="name", nullable = false)
+    @Column(name="name")
     private String name;
-    @Column(name="surname", nullable = false)
+    @Column(name="surname")
     private String surname;
     @Column(name="username", nullable = false)
     private String username;
@@ -30,6 +30,4 @@ public class User {
     private String email;
     @Column(name="cellNum")
     private String cellNum;
-    @Column(name="passoword", nullable = false)
-    private String password;
 }
