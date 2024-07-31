@@ -34,3 +34,5 @@ build/
 
 ### Envs
 env.properties
+/env.properties
+
