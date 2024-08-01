@@ -27,13 +27,11 @@ public class UserController {
         newUser.setCellNum(user.getCellNum());
         newUser.setUsername(user.getUsername());
 
-        boolean isPresent = userRepository.existsUserByEmail(newUser.getEmail());
-        if (!isPresent) {
+        Optional<User> oldUser = userRepository.findUserByEmail(newUser.getEmail());
+        if (oldUser.isEmpty()) {
             return userRepository.save(newUser);
         }
-
-        return newUser;
-
+        return oldUser.get();
     }
 
     @GetMapping("/all")
