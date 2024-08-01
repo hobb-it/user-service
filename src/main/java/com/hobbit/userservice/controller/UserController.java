@@ -25,10 +25,13 @@ public class UserController {
         newUser.setSurname(user.getSurname());
         newUser.setEmail(user.getEmail());
         newUser.setCellNum(user.getCellNum());
-        newUser.setPassword(user.getPassword());
         newUser.setUsername(user.getUsername());
 
-        return userRepository.save(newUser);
+        Optional<User> oldUser = userRepository.findUserByEmail(newUser.getEmail());
+        if (oldUser.isEmpty()) {
+            return userRepository.save(newUser);
+        }
+        return oldUser.get();
     }
 
     @GetMapping("/all")
@@ -75,7 +78,6 @@ public class UserController {
             _user.setSurname(user.getSurname());
             _user.setEmail(user.getEmail());
             _user.setCellNum(user.getCellNum());
-            _user.setPassword(user.getPassword());
             userRepository.save(_user);
         }
     }
