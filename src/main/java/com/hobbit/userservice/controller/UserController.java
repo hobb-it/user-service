@@ -2,6 +2,8 @@ package com.hobbit.userservice.controller;
 
 import com.hobbit.userservice.model.*;
 import com.hobbit.userservice.repo.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,9 @@ public class UserController {
 
     private final UserRepository userRepository;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody User user) {
@@ -29,6 +34,8 @@ public class UserController {
 
         Optional<User> oldUser = userRepository.findUserByEmail(newUser.getEmail());
         if (oldUser.isEmpty()) {
+            String emailAndName = newUser.getEmail() + "," + newUser.getName();
+            rabbitTemplate.convertAndSend("notificationService", emailAndName);
             return userRepository.save(newUser);
         }
         return oldUser.get();
